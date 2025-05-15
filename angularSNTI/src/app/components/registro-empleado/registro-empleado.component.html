@@ -1,0 +1,367 @@
+<div class="card">
+  <div class="card-body">
+    <!-- Formulario bonito -->
+
+    <div class="registro-container">
+      <p>CURP required: {{curp.errors?.['required']}}</p>
+      <p>CURP: {{ curp.value }}</p>
+
+      <h2 class="registro-title">Registro de Trabajador</h2>
+
+      <form
+        class="registro-form"
+        [formGroup]="formEmpleado"
+        (ngSubmit)="mostarDatos()"
+      >
+        <!-- Nombre completo -->
+        <div class="form-group">
+          <label>Nombre</label>
+          <!-- En la etiqueta input con formControlName hago la conexion del input con la variable de ts  -->
+          <input type="text" id="nombre" formControlName="name" />
+          <!-- Validación: solo muestra errores si el campo fue tocado y no es válido -->
+          <small *ngIf="name.invalid && name.touched" class="error">
+            *El nombre es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Apellido Paterno</label>
+          <input
+            type="text"
+            id="apellidoPaterno"
+            formControlName="apellidoPaterno"
+          />
+          <small
+            *ngIf="apellidoPaterno.invalid && apellidoPaterno.touched"
+            class="error"
+          >
+            *El apellido paterno es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Apellido Materno</label>
+          <input
+            type="text"
+            id="apellidoMaterno"
+            formControlName="apellidoMaterno"
+          />
+          <small
+            *ngIf="apellidoMaterno.invalid && apellidoMaterno.touched"
+            class="error"
+          >
+            *El apellido Materno es obligatorio.
+          </small>
+        </div>
+
+        <!-- Datos personales -->
+        <div class="form-group">
+          <label>Fecha de Nacimiento</label>
+          <input
+            type="date"
+            id="fechaNacimiento"
+            formControlName="fechaNacimiento"
+            [attr.min]="fechaMinNacimiento | date : 'yyyy-MM-dd'"
+            [attr.max]="fechaMaxNacimiento | date : 'yyyy-MM-dd'"
+          />
+          <small
+            *ngIf="fechaNacimiento.invalid && fechaNacimiento.touched"
+            class="error"
+          >
+            *La fecha de nacimiento es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Sexo</label>
+          <select formControlName="sexo" id="sexo">
+            <option value="" disabled selected>Selecciona</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </select>
+          <small *ngIf="sexo.invalid && sexo.touched" class="error">
+            *El sexo es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>CURP</label>
+          <input
+            id="curp"
+            type="text"
+            formControlName="curp"
+            maxlength="18"
+            (input)="toUppercase('curp', $event)"
+          />
+          <small
+            *ngIf="curp.errors?.['required'] && curp.touched"
+            class="error"
+          >
+            *La CURP es obligatoria.
+          </small>
+          <small *ngIf="curp.errors?.['pattern'] && curp.touched" class="error">
+            *La CURP no es válida.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>RFC</label>
+          <input
+            id="rfc"
+            type="text"
+            maxlength="13"
+            formControlName="rfc"
+            (input)="toUppercase('rfc', $event)"
+          />
+          <small *ngIf="rfc.errors?.['required'] && rfc.touched" class="error">
+            *El RFC es obligatoria.
+          </small>
+          <small *ngIf="rfc.errors?.['pattern'] && rfc.touched" class="error">
+            *El RFC no es válida.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            id="email"
+            placeholder="email"
+          />
+          <div *ngIf="email.invalid && (email.dirty || email.touched)">
+            <span *ngIf="email.errors?.['required']"
+              >*El email es obligatorio</span
+            >
+            <span *ngIf="email.errors?.['pattern']"
+              >*El email debe ser valido</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Estado Civil</label>
+          <select formControlName="estadoCivil" id="estadoCivil">
+            <option value="" disabled selected>Selecciona</option>
+            <option value="soltero">Soltero(a)</option>
+            <option value="casado">Casado(a)</option>
+            <option value="divorciado">Divorciado(a)</option>
+            <option value="viudo">Viudo(a)</option>
+          </select>
+          <small
+            *ngIf="estadoCivil.invalid && estadoCivil.touched"
+            class="error"
+          >
+            *El Estado Civil es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Número de Hijos</label>
+          <input
+            type="number"
+            min="0"
+            max="10"
+            formControlName="numeroHijos"
+            id="numeroHijos"
+          />
+          <div
+            *ngIf="
+              numeroHijos.invalid && (numeroHijos.dirty || numeroHijos.touched)
+            "
+          >
+            <span *ngIf=" numeroHijos.errors?.['required']"
+              >*El Número de Hijos es obligatorio</span
+            >
+            <span *ngIf="numeroHijos.errors?.['min']"
+              >*El número de Hijos minimo es 0</span
+            >
+            <span *ngIf="numeroHijos.errors?.['max']"
+              >*El número de Hijos maximo es 10</span
+            >
+          </div>
+        </div>
+
+        <!-- Datos laborales -->
+        <!-- <div class="form-group">
+            <label>Número de Empleado *opcional</label>
+            <input type="text" />
+          </div> -->
+        <div class="form-group">
+          <label>Número de Plaza</label>
+          <input
+            type="number"
+            id="numeroPlaza"
+            formControlName="numeroPlaza"
+            min="0"
+            max="1000"
+          />
+          <div
+            *ngIf="
+              numeroPlaza.invalid && (numeroPlaza.dirty || numeroPlaza.touched)
+            "
+          >
+            <span *ngIf=" numeroPlaza.errors?.['required']"
+              >*El Número de Plaza es obligatorio</span
+            >
+            <span *ngIf="numeroPlaza.errors?.['min']"
+              >*El número de Plaza minimo es 0</span
+            >
+            <span *ngIf="numeroPlaza.errors?.['max']"
+              >*El número de Plaza maximo es 1000</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Fecha de Ingreso</label>
+          <input
+            type="date"
+            id="fechaIngreso"
+            formControlName="fechaIngreso"
+            [attr.min]="fechaMinIngreso | date : 'yyyy-MM-dd'"
+            [attr.max]="hoy | date : 'yyyy-MM-dd'"
+          />
+
+          <small
+            *ngIf="fechaIngreso.invalid && fechaIngreso.touched"
+            class="error"
+          >
+            *La fecha de nacimiento es obligatoria.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de Ingreso al Gobierno</label>
+          <input
+            type="date"
+            formControlName="fechaIngresoGobierno"
+            [attr.min]="fechaMinIngresoGobierno | date : 'yyyy-MM-dd'"
+            [attr.max]="hoy | date : 'yyyy-MM-dd'"
+          />
+          <small
+            *ngIf="fechaIngresoGobierno.invalid && fechaIngresoGobierno.touched"
+            class="error"
+          >
+            *Debe ser entre 1980 y la fecha actual.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Nivel de Puesto</label>
+          <input
+            type="number"
+            id="nivelPuesto"
+            formControlName="nivelPuesto"
+            min="0"
+            max="1000"
+          />
+          <div
+            *ngIf="nivelPuesto.invalid && (nivelPuesto.dirty || nivelPuesto.touched)"
+          >
+            <span *ngIf=" nivelPuesto.errors?.['required']"
+              >*El Número de Plaza es obligatorio</span
+            >
+            <span *ngIf="nivelPuesto.errors?.['min']"
+              >*El número de Plaza minimo es 0</span
+            >
+            <span *ngIf="nivelPuesto.errors?.['max']"
+              >*El número de Plaza maximo es 1000</span
+            >
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Nombre de Puesto</label>
+          <input type="text" id="nombrePuesto" formControlName="nombrePuesto" />
+          <small
+            *ngIf="nombrePuesto.invalid && nombrePuesto.touched"
+            class="error"
+          >
+            *El nombre del puesto es obligatorio.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Puesto INPI</label>
+          <input type="text" id="puestoINPI" formControlName="puestoINPI" />
+          <small *ngIf="puestoINPI.invalid && puestoINPI.touched" class="error">
+            *El nombre del puesto INPI es obligatorio.
+          </small>
+        </div>
+
+        <!-- Datos escolares -->
+        <div class="form-group">
+          <label>Nivel de Estudios</label>
+          <select formControlName="nivelEstudios" id="nivelEstudios">
+            <option value="" disabled selected>Selecciona</option>
+            <option value="Primaria">Primaria</option>
+            <option value="Secundaria">Secundaria</option>
+            <option value="Preparatoria">Preparatoria</option>
+            <option value="Licenciatura">Licenciatura</option>
+            <option value="Maestría">Maestría</option>
+            <option value="Doctorado">Doctorado</option>
+          </select>
+          <small
+            *ngIf="nivelEstudios.invalid && nivelEstudios.touched"
+            class="error"
+          >
+            *El Nivel de Estudios es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Institución de Estudios</label>
+          <input
+            type="text"
+            id="institucionEstudios"
+            formControlName="institucionEstudios"
+          />
+          <small
+            *ngIf="institucionEstudios.invalid && institucionEstudios.touched"
+            class="error"
+          >
+            *La Institución de Estudios es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Certificado de Estudios *(input inactivo)</label>
+          <input type="text" />
+        </div>
+        <div class="form-group">
+          <label>Plaza Base</label>
+          <input type="text" formControlName="plazaBase" id="plazaBase" />
+          <small *ngIf="plazaBase.invalid && plazaBase.touched" class="error">
+            *La Plaza Base es obligatoria.
+          </small>
+        </div>
+        <div class="form-group">
+          <label>Fecha de Actualización</label>
+          <input
+            type="date"
+            formControlName="fechaActualizacion"
+            id="fechaActualizacion"
+            [attr.min]="'2024-01-01'"
+            [attr.max]="formatearFechaParaInput(hoy)"
+          />
+          <small
+            *ngIf="fechaActualizacion?.errors?.['fechaFueraDeRango'] && fechaActualizacion?.touched"
+            class="error"
+          >
+            *La fecha debe estar entre el 1 de enero de 2024 y hoy.
+          </small>
+        </div>
+
+        <!-- Botón de registro -->
+
+        <!--
+- ngClass aplica una clase distinta dependiendo si el formulario es válido o no.
+- btn-valido: se aplica cuando el formulario está completo y listo para enviarse.
+- btn-invalido: se aplica cuando faltan campos, y desactiva la interacción visualmente.
+-->
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            [disabled]="formEmpleado.invalid"
+            [ngClass]="{
+              'btn-valido': formEmpleado.valid,
+              'btn-invalido': formEmpleado.invalid
+            }"
+          >
+            Registrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

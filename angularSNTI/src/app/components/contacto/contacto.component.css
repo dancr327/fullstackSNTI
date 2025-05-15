@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .contact-frame {
+    min-height: calc(100vh - 160px); /* Ajusta 160px si tu header+footer tienen otra altura */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background-color: #f0f0f0;
+  }
+  
+  
+  .contact-card {
+    padding: 20px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .contact-card:last-child {
+    border-bottom: none;
+  }
+
+  .contact-title {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    position: relative;
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+  }
+  
+  .contact-title::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 4px;
+    background-color: #007bff;
+    margin: 10px auto 0 auto;
+    border-radius: 2px;
+  }

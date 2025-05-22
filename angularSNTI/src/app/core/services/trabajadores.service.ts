@@ -11,7 +11,7 @@ export interface Trabajadores {
   curp: string;
   rfc: string;
   email: string;
-  situacion_sentimental?: string;
+  situacion_sentimental?: string; //es opcional pero yo lo pondría como obligatorio
   numero_hijos: number;
   numero_empleado: string;
   numero_plaza: string;
@@ -25,8 +25,8 @@ export interface Trabajadores {
   nivel_estudios?: string;
   institucion_estudios?: string;
   certificado_estudios?: boolean;
-  plaza_base?: string;
-  fecha_actualizacion?: string;
+  plaza_base?: string;  //campo opcional pero yo lo pondría como obligatorio
+  fecha_actualizacion?: string; //campo opcional pero yo lo pondría como obligatorio
 }
 
 
@@ -34,9 +34,9 @@ export interface Trabajadores {
   providedIn: 'root'
 })
 export class TrabajadoresService {
-private API_URL = 'http://localhost:5432/trabajadores'; // Ajusta según tu backend
+private API_URL =  'http://localhost:3000/trabajadores'; // Ajusta según tu backend
   constructor(private http: HttpClient) { }
-  crearTrabajador(data: Trabajadores): Observable<any> {
-      return this.http.post(this.API_URL, data);
+  crearTrabajador(trabajadores: Trabajadores): Observable<Trabajadores> {
+    return this.http.post<Trabajadores>(this.API_URL, trabajadores);
     }
 }

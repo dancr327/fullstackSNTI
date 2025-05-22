@@ -8,13 +8,20 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const { PrismaClient } = require('@prisma/client');
 const { errorHandler } = require('./middleware');
+
 const indexRoutes = require('./routes'); // Aquí están agrupadas ya
+
 const userRoutes = require('./routes/userRoutes');
+const seccionRoutes = require('./routes/seccionRoutes'); // Ajusta la ruta si es necesario
+const documentoRoutes = require('./routes/documentoRoutes'); // Ajusta la ruta si es necesario
+const hijosRoutes = require('./routes/hijosRoutes'); // Ajusta la ruta si es necesario
+
 
 
 const authRoutes = require('./routes/authRoutes'); // Ajusta la ruta si es necesario
 const trabajadorRoutes = require('./routes/trabajadorRoutes'); // Ajusta la ruta si es necesario
 const authMiddleware = require('./middleware/auth'); // Ajusta la ruta si es necesario
+const { obtenerHijosPorTrabajador } = require('./controllers/hijosController');
 // Inicializar app y prisma
 const app = express();
 const prisma = new PrismaClient();
@@ -67,6 +74,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: t
 app.use('/api', indexRoutes,);
 app.use('/api/auth', authRoutes); // Monta el enrutador con el prefijo /api/auth
 app.use('/trabajadores', trabajadorRoutes);
+app.use('/users',userRoutes); // Monta el enrutador con el prefijo /api/users
+app.use('/secciones', seccionRoutes); // Monta el enrutador con el prefijo /api/secciones
+app.use('/documentos', documentoRoutes); 
+app.use('/hijos', hijosRoutes); // Monta el enrutador con el prefijo /api/hijos
+
+
 
 // Ruta base (opcional, si es necesario)
 app.get('/', (req, res) => {
@@ -88,7 +101,7 @@ app.use('*', (req, res) => {
 app.listen(PORT, async () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
   console.log(`Documentación Swagger disponible en http://localhost:${PORT}/api-docs`);
-
+  console.log(`echale ganas `);
   try {
     await prisma.$connect();
     console.log('Conexión a la base de datos establecida');

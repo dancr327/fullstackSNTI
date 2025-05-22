@@ -3,8 +3,8 @@
     <!-- Formulario bonito -->
 
     <div class="registro-container">
-      <p>CURP required: {{curp.errors?.['required']}}</p>
-      <p>CURP: {{ curp.value }}</p>
+      <!-- <p>CURP required: {{curp.errors?.['required']}}</p>
+      <p>CURP: {{ curp.value }}</p> -->
 
       <h2 class="registro-title">Registro de Trabajador</h2>
 
@@ -17,9 +17,9 @@
         <div class="form-group">
           <label>Nombre</label>
           <!-- En la etiqueta input con formControlName hago la conexion del input con la variable de ts  -->
-          <input type="text" id="nombre" formControlName="name" />
+          <input type="text" id="nombre" formControlName="nombre" />
           <!-- Validación: solo muestra errores si el campo fue tocado y no es válido -->
-          <small *ngIf="name.invalid && name.touched" class="error">
+          <small *ngIf="nombre.invalid && nombre.touched" class="error">
             *El nombre es obligatorio.
           </small>
         </div>
@@ -28,10 +28,10 @@
           <input
             type="text"
             id="apellidoPaterno"
-            formControlName="apellidoPaterno"
+            formControlName="apellido_paterno"
           />
           <small
-            *ngIf="apellidoPaterno.invalid && apellidoPaterno.touched"
+            *ngIf="apellido_paterno.invalid && apellido_paterno.touched"
             class="error"
           >
             *El apellido paterno es obligatorio.
@@ -42,10 +42,10 @@
           <input
             type="text"
             id="apellidoMaterno"
-            formControlName="apellidoMaterno"
+            formControlName="apellido_materno"
           />
           <small
-            *ngIf="apellidoMaterno.invalid && apellidoMaterno.touched"
+            *ngIf="apellido_materno.invalid && apellido_materno.touched"
             class="error"
           >
             *El apellido Materno es obligatorio.
@@ -57,13 +57,13 @@
           <label>Fecha de Nacimiento</label>
           <input
             type="date"
-            id="fechaNacimiento"
-            formControlName="fechaNacimiento"
+            id="fecha_nacimiento"
+            formControlName="fecha_nacimiento"
             [attr.min]="fechaMinNacimiento | date : 'yyyy-MM-dd'"
             [attr.max]="fechaMaxNacimiento | date : 'yyyy-MM-dd'"
           />
           <small
-            *ngIf="fechaNacimiento.invalid && fechaNacimiento.touched"
+            *ngIf="fecha_nacimiento.invalid && fecha_nacimiento.touched"
             class="error"
           >
             *La fecha de nacimiento es obligatoria.
@@ -122,7 +122,6 @@
             formControlName="email"
             class="form-control"
             id="email"
-            placeholder="email"
           />
           <div *ngIf="email.invalid && (email.dirty || email.touched)">
             <span *ngIf="email.errors?.['required']"
@@ -134,8 +133,11 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Estado Civil</label>
-          <select formControlName="estadoCivil" id="estadoCivil">
+          <label>Situacion sentimental</label>
+          <select
+            formControlName="situacion_sentimental"
+            id="situacion_sentimental"
+          >
             <option value="" disabled selected>Selecciona</option>
             <option value="soltero">Soltero(a)</option>
             <option value="casado">Casado(a)</option>
@@ -143,7 +145,9 @@
             <option value="viudo">Viudo(a)</option>
           </select>
           <small
-            *ngIf="estadoCivil.invalid && estadoCivil.touched"
+            *ngIf="
+              situacion_sentimental.invalid && situacion_sentimental.touched
+            "
             class="error"
           >
             *El Estado Civil es obligatorio.
@@ -155,52 +159,66 @@
             type="number"
             min="0"
             max="10"
-            formControlName="numeroHijos"
-            id="numeroHijos"
+            formControlName="numero_hijos"
+            id="numero_hijos"
           />
           <div
             *ngIf="
-              numeroHijos.invalid && (numeroHijos.dirty || numeroHijos.touched)
+              numero_hijos.invalid &&
+              (numero_hijos.dirty || numero_hijos.touched)
             "
           >
-            <span *ngIf=" numeroHijos.errors?.['required']"
+            <span *ngIf=" numero_hijos.errors?.['required']"
               >*El Número de Hijos es obligatorio</span
             >
-            <span *ngIf="numeroHijos.errors?.['min']"
+            <span *ngIf="numero_hijos.errors?.['min']"
               >*El número de Hijos minimo es 0</span
             >
-            <span *ngIf="numeroHijos.errors?.['max']"
+            <span *ngIf="numero_hijos.errors?.['max']"
               >*El número de Hijos maximo es 10</span
             >
           </div>
         </div>
 
         <!-- Datos laborales -->
-        <!-- <div class="form-group">
-            <label>Número de Empleado *opcional</label>
-            <input type="text" />
-          </div> -->
+        <div class="form-group">
+          <label>Numero de empleado</label>
+          <input
+            type="text"
+            id="numero_empleado"
+            formControlName="numero_empleado"
+            maxlength="10"
+            (input)="toUppercase('numero_empleado', $event)"
+          />
+          <small
+            *ngIf="numero_empleado.invalid && numero_empleado.touched"
+            class="error"
+          >
+            *El numero de empleado es obligatorio.
+          </small>
+        </div>
         <div class="form-group">
           <label>Número de Plaza</label>
           <input
             type="number"
             id="numeroPlaza"
-            formControlName="numeroPlaza"
+            formControlName="numero_plaza"
             min="0"
             max="1000"
           />
           <div
             *ngIf="
-              numeroPlaza.invalid && (numeroPlaza.dirty || numeroPlaza.touched)
+              numero_plaza.invalid &&
+              (numero_plaza.dirty || numero_plaza.touched)
             "
           >
-            <span *ngIf=" numeroPlaza.errors?.['required']"
+            <span *ngIf=" numero_plaza.errors?.['required']"
               >*El Número de Plaza es obligatorio</span
             >
-            <span *ngIf="numeroPlaza.errors?.['min']"
+            <span *ngIf="numero_plaza.errors?.['min']"
               >*El número de Plaza minimo es 0</span
             >
-            <span *ngIf="numeroPlaza.errors?.['max']"
+            <span *ngIf="numero_plaza.errors?.['max']"
               >*El número de Plaza maximo es 1000</span
             >
           </div>
@@ -209,14 +227,14 @@
           <label>Fecha de Ingreso</label>
           <input
             type="date"
-            id="fechaIngreso"
-            formControlName="fechaIngreso"
+            id="fecha_ingreso"
+            formControlName="fecha_ingreso"
             [attr.min]="fechaMinIngreso | date : 'yyyy-MM-dd'"
             [attr.max]="hoy | date : 'yyyy-MM-dd'"
           />
 
           <small
-            *ngIf="fechaIngreso.invalid && fechaIngreso.touched"
+            *ngIf="fecha_ingreso.invalid && fecha_ingreso.touched"
             class="error"
           >
             *La fecha de nacimiento es obligatoria.
@@ -227,12 +245,14 @@
           <label>Fecha de Ingreso al Gobierno</label>
           <input
             type="date"
-            formControlName="fechaIngresoGobierno"
+            formControlName="fecha_ingreso_gobierno"
             [attr.min]="fechaMinIngresoGobierno | date : 'yyyy-MM-dd'"
             [attr.max]="hoy | date : 'yyyy-MM-dd'"
           />
           <small
-            *ngIf="fechaIngresoGobierno.invalid && fechaIngresoGobierno.touched"
+            *ngIf="
+              fecha_ingreso_gobierno.invalid && fecha_ingreso_gobierno.touched
+            "
             class="error"
           >
             *Debe ser entre 1980 y la fecha actual.
@@ -242,30 +262,37 @@
           <label>Nivel de Puesto</label>
           <input
             type="number"
-            id="nivelPuesto"
-            formControlName="nivelPuesto"
+            id="nivel_puesto"
+            formControlName="nivel_puesto"
             min="0"
             max="1000"
           />
           <div
-            *ngIf="nivelPuesto.invalid && (nivelPuesto.dirty || nivelPuesto.touched)"
+            *ngIf="
+              nivel_puesto.invalid &&
+              (nivel_puesto.dirty || nivel_puesto.touched)
+            "
           >
-            <span *ngIf=" nivelPuesto.errors?.['required']"
+            <span *ngIf=" nivel_puesto.errors?.['required']"
               >*El Número de Plaza es obligatorio</span
             >
-            <span *ngIf="nivelPuesto.errors?.['min']"
+            <span *ngIf="nivel_puesto.errors?.['min']"
               >*El número de Plaza minimo es 0</span
             >
-            <span *ngIf="nivelPuesto.errors?.['max']"
+            <span *ngIf="nivel_puesto.errors?.['max']"
               >*El número de Plaza maximo es 1000</span
             >
           </div>
         </div>
         <div class="form-group">
           <label>Nombre de Puesto</label>
-          <input type="text" id="nombrePuesto" formControlName="nombrePuesto" />
+          <input
+            type="text"
+            id="nombre_puesto"
+            formControlName="nombre_puesto"
+          />
           <small
-            *ngIf="nombrePuesto.invalid && nombrePuesto.touched"
+            *ngIf="nombre_puesto.invalid && nombre_puesto.touched"
             class="error"
           >
             *El nombre del puesto es obligatorio.
@@ -273,16 +300,57 @@
         </div>
         <div class="form-group">
           <label>Puesto INPI</label>
-          <input type="text" id="puestoINPI" formControlName="puestoINPI" />
-          <small *ngIf="puestoINPI.invalid && puestoINPI.touched" class="error">
+          <input type="text" id="puesto_inpi" formControlName="puesto_inpi" />
+          <small
+            *ngIf="puesto_inpi.invalid && puesto_inpi.touched"
+            class="error"
+          >
             *El nombre del puesto INPI es obligatorio.
           </small>
+        </div>
+
+        <div class="form-group">
+          <label>Adscripcion</label>
+          <input type="text" id="adscripcion" formControlName="adscripcion" />
+          <small
+            *ngIf="adscripcion.invalid && adscripcion.touched"
+            class="error"
+          >
+            *La adscripcion es obligatoria.
+          </small>
+        </div>
+        
+        <div class="form-group">
+          <label>Id de seccion</label>
+          <input
+            type="number"
+            id="id_seccion"
+            formControlName="id_seccion"
+            min="1"
+            max="500"
+          />
+          <div
+            *ngIf="
+              id_seccion.invalid &&
+              (id_seccion.dirty || id_seccion.touched)
+            "
+          >
+            <span *ngIf=" id_seccion.errors?.['required']"
+              >*El Id de seccion es obligatorio</span
+            >
+            <span *ngIf="numero_plaza.errors?.['min']"
+              >*El Id de seccion minimo es 1</span
+            >
+            <span *ngIf="numero_plaza.errors?.['max']"
+              >*El Id de seccion maximo es 500</span
+            >
+          </div>
         </div>
 
         <!-- Datos escolares -->
         <div class="form-group">
           <label>Nivel de Estudios</label>
-          <select formControlName="nivelEstudios" id="nivelEstudios">
+          <select formControlName="nivel_estudios" id="nivel_estudios">
             <option value="" disabled selected>Selecciona</option>
             <option value="Primaria">Primaria</option>
             <option value="Secundaria">Secundaria</option>
@@ -292,7 +360,7 @@
             <option value="Doctorado">Doctorado</option>
           </select>
           <small
-            *ngIf="nivelEstudios.invalid && nivelEstudios.touched"
+            *ngIf="nivel_estudios.invalid && nivel_estudios.touched"
             class="error"
           >
             *El Nivel de Estudios es obligatorio.
@@ -303,11 +371,11 @@
           <label>Institución de Estudios</label>
           <input
             type="text"
-            id="institucionEstudios"
-            formControlName="institucionEstudios"
+            id="institucion_estudios"
+            formControlName="institucion_estudios"
           />
           <small
-            *ngIf="institucionEstudios.invalid && institucionEstudios.touched"
+            *ngIf="institucion_estudios.invalid && institucion_estudios.touched"
             class="error"
           >
             *La Institución de Estudios es obligatoria.
@@ -319,8 +387,8 @@
         </div>
         <div class="form-group">
           <label>Plaza Base</label>
-          <input type="text" formControlName="plazaBase" id="plazaBase" />
-          <small *ngIf="plazaBase.invalid && plazaBase.touched" class="error">
+          <input type="text" formControlName="plaza_base" id="plaza_base" />
+          <small *ngIf="plaza_base.invalid && plaza_base.touched" class="error">
             *La Plaza Base es obligatoria.
           </small>
         </div>
@@ -328,13 +396,13 @@
           <label>Fecha de Actualización</label>
           <input
             type="date"
-            formControlName="fechaActualizacion"
-            id="fechaActualizacion"
+            formControlName="fecha_actualizacion"
+            id="fecha_actualizacion"
             [attr.min]="'2024-01-01'"
             [attr.max]="formatearFechaParaInput(hoy)"
           />
           <small
-            *ngIf="fechaActualizacion?.errors?.['fechaFueraDeRango'] && fechaActualizacion?.touched"
+            *ngIf="fecha_actualizacion?.errors?.['fechaFueraDeRango'] && fecha_actualizacion?.touched"
             class="error"
           >
             *La fecha debe estar entre el 1 de enero de 2024 y hoy.

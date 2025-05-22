@@ -3,10 +3,14 @@ import { FormControl,FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+
+//TrabajadoresService sirve para hacer peticiones al backend
+import { TrabajadorService } from '../../core/services/trabajador.service';
+
 @Component({
   selector: 'app-registro-empleado',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, ],
   templateUrl: './registro-empleado.component.html',
   styleUrl: './registro-empleado.component.css'
 })
@@ -14,20 +18,20 @@ export class RegistroEmpleadoComponent {
 
 //getters para acceder a los controles del formulario
 // de manera mas sencilla, sin tener que escribir formEmpleado.get('name') cada vez
-get name(){
-  return this.formEmpleado.get('name') as FormControl;
+get nombre(){
+  return this.formEmpleado.get('nombre') as FormControl;
 }
 get email(){
   return this.formEmpleado.get('email') as FormControl;
 }
-get apellidoPaterno(){
-  return this.formEmpleado.get('apellidoPaterno') as FormControl;
+get apellido_paterno(){
+  return this.formEmpleado.get('apellido_paterno') as FormControl;
 }
-get apellidoMaterno(){
-  return this.formEmpleado.get('apellidoMaterno') as FormControl;
+get apellido_materno(){
+  return this.formEmpleado.get('apellido_materno') as FormControl;
 }
-get fechaNacimiento(){
-  return this.formEmpleado.get('fechaNacimiento') as FormControl;
+get fecha_nacimiento(){
+  return this.formEmpleado.get('fecha_nacimiento') as FormControl;
 }
 get sexo(){
   return this.formEmpleado.get('sexo') as FormControl;
@@ -38,67 +42,84 @@ get curp(){
 get rfc(){
   return this.formEmpleado.get('rfc') as FormControl;
 }
-get estadoCivil(){
-  return this.formEmpleado.get('estadoCivil') as FormControl;
+get situacion_sentimental(){
+  return this.formEmpleado.get('situacion_sentimental') as FormControl;
 }
-get numeroHijos(){
-  return this.formEmpleado.get('numeroHijos') as FormControl;
+get numero_hijos(){
+  return this.formEmpleado.get('numero_hijos') as FormControl;
 }
-get numeroPlaza(){
-  return this.formEmpleado.get('numeroPlaza') as FormControl;
+get numero_empleado(){
+  return this.formEmpleado.get('numero_empleado') as FormControl;
 }
-get fechaIngreso(){
-  return this.formEmpleado.get('fechaIngreso') as FormControl;
+get numero_plaza(){
+  return this.formEmpleado.get('numero_plaza') as FormControl;
 }
-get fechaIngresoGobierno(){
-  return this.formEmpleado.get('fechaIngresoGobierno') as FormControl;
+get fecha_ingreso(){
+  return this.formEmpleado.get('fecha_ingreso') as FormControl;
 }
-get nivelPuesto(){
-  return this.formEmpleado.get('nivelPuesto') as FormControl;
+get fecha_ingreso_gobierno(){
+  return this.formEmpleado.get('fecha_ingreso_gobierno') as FormControl;
 }
-get nombrePuesto(){
-  return this.formEmpleado.get('nombrePuesto') as FormControl;
+get nivel_puesto(){
+  return this.formEmpleado.get('nivel_puesto') as FormControl;
 }
-get puestoINPI(){
-  return this.formEmpleado.get('puestoINPI') as FormControl;
+get nombre_puesto(){
+  return this.formEmpleado.get('nombre_puesto') as FormControl;
 }
-get nivelEstudios(){
-  return this.formEmpleado.get('nivelEstudios') as FormControl;
+get puesto_inpi(){
+  return this.formEmpleado.get('puesto_inpi') as FormControl;
 }
-get institucionEstudios(){
-  return this.formEmpleado.get('institucionEstudios') as FormControl;
+get adscripcion(){
+  return this.formEmpleado.get('adscripcion') as FormControl;
 }
-get plazaBase(){
-  return this.formEmpleado.get('plazaBase') as FormControl;
+get id_seccion(){
+  return this.formEmpleado.get('id_seccion') as FormControl;
 }
-get fechaActualizacion(){
-  return this.formEmpleado.get('fechaActualizacion') as FormControl;
+get nivel_estudios(){
+  return this.formEmpleado.get('nivel_estudios') as FormControl;
+}
+get institucion_estudios(){
+  return this.formEmpleado.get('institucion_estudios') as FormControl;
+}
+get certificado_estudios(){
+  return this.formEmpleado.get('certificado_estudios') as FormControl;
+}
+get plaza_base(){
+  return this.formEmpleado.get('plaza_base') as FormControl;
+}
+get fecha_actualizacion(){
+  return this.formEmpleado.get('fecha_actualizacion') as FormControl;
 }
 
   formEmpleado= new FormGroup({ 
    // con validators.riquired se indica que el campo es requerido
-    'name': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-     // cuando quiero implementar mas de una validacion, se hace con un array
-  // en este caso "el campo es requerido" y "tiene que ser un email"
-    'email': new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
-    'apellidoPaterno': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-    'apellidoMaterno': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-    'fechaNacimiento': new FormControl('',[Validators.required,this.validarRangoEdad()]),
+    'nombre': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'apellido_paterno': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'apellido_materno': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'fecha_nacimiento': new FormControl('',[Validators.required,this.validarRangoEdad()]),
     'sexo': new FormControl('',Validators.required),
     'curp': new FormControl('', [Validators.required, Validators.pattern(/^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z\d]{2}$/)]),
     'rfc':new FormControl ('', [Validators.required, Validators.pattern(/^([A-ZÑ&]{3,4})\d{6}([A-Z\d]{3})$/)]),
-    'estadoCivil': new FormControl('',Validators.required),
-    'numeroHijos': new FormControl(0,[Validators.required, Validators.min(0), Validators.max(10)]),
-    'numeroPlaza': new FormControl('',[Validators.required,Validators.min(0), Validators.max(1000)]),
-    'fechaIngreso': new FormControl('',[Validators.required, this.validarAntiguedadDesde1980()]),
-    'fechaIngresoGobierno': new FormControl ('', [Validators.required, this.validarAntiguedadMaxima()]),
-    'nivelPuesto': new FormControl('',Validators.required),
-    'nombrePuesto': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-    'puestoINPI': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-    'nivelEstudios': new FormControl('',Validators.required),
-    'institucionEstudios': new FormControl ('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-    'plazaBase': new FormControl ('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
-    'fechaActualizacion': new FormControl (this.formatearFechaParaInput(new Date()), [Validators.required, this.validarFechaDesde2024()]),
+  // cuando quiero implementar mas de una validacion, se hace con un array
+  // en este caso "el campo es requerido" y "tiene que ser un email"
+
+    'email': new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
+    'situacion_sentimental': new FormControl('',Validators.required),
+    'numero_empleado': new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z0-9]{10}$/)]),
+    'numero_hijos': new FormControl(0,[Validators.required, Validators.min(0), Validators.max(10)]),
+    'numero_plaza': new FormControl('',[Validators.required,Validators.min(0), Validators.max(1000)]),
+    'fecha_ingreso': new FormControl('',[Validators.required, this.validarAntiguedadDesde1980()]),
+    'fecha_ingreso_gobierno': new FormControl ('', [Validators.required, this.validarAntiguedadMaxima()]),
+    'nivel_puesto': new FormControl('',Validators.required),
+    'nombre_puesto': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'puesto_inpi': new FormControl('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'adscripcion': new FormControl('', Validators.required),
+    'id_seccion': new FormControl(1, Validators.required),
+    'nivel_estudios': new FormControl('',Validators.required),
+    'institucion_estudios': new FormControl ('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'certificado_estudios': new FormControl(false),
+    'plaza_base': new FormControl ('',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9][A-Za-zÁÉÍÓÚÑáéíóúüÜ0-9\s.'-]*$/)]),
+    'fecha_actualizacion': new FormControl (this.formatearFechaParaInput(new Date()), [Validators.required, this.validarFechaDesde2024()]),
   });
 
 
@@ -117,7 +138,11 @@ fechaMinIngreso = new Date('1980-01-01');
 fechaMinIngresoGobierno = new Date('1980-01-01');
 fechaMinActualizacion = new Date('2024-01-01');
 
-constructor(private fb: FormBuilder) {
+constructor(
+  private fb: FormBuilder,
+  
+  private trabajadorService: TrabajadorService // inyectar el servicio de trabajadores
+) {
   this.fechaMaxNacimiento.setFullYear(this.hoy.getFullYear() - 18);
 }
 
@@ -178,12 +203,22 @@ validarAntiguedadMaxima(): ValidatorFn {
   
 
 
-
 //metodo uppercase para convertir el texto a mayusculas
 toUppercase(controlName: string, event: Event) {
   const input = event.target as HTMLInputElement;
   const uppercaseValue = input.value.toUpperCase();
   this.formEmpleado.get(controlName)?.setValue(uppercaseValue);
 }
+
+//codigo para hace post a trabajadores
+private formatearFechaISO(fecha: string | null): string {
+  if (!fecha) return '';
+  const date = new Date(fecha);
+  return date.toISOString().split('T')[0]; // Regresa yyyy-MM-dd
+}
+
+
+
+
  
 }

@@ -27,10 +27,14 @@ export class LoginComponent {
   get password(){
     return this.formLogin.get('password') as FormControl;
   }
+  get user(){
+    return this.formLogin.get('user') as FormControl;
+  }
 
   formLogin = new FormGroup({
-    'email': new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]),
-    'curp': new FormControl('', [Validators.required, Validators.pattern(/^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z\d]{2}$/)]),
+    'email': new FormControl('', [ Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]), //quite el required momentaniamente
+    'curp': new FormControl('', [Validators.pattern(/^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z\d]{2}$/)]), //quite el required momentaniamente
+    'user': new FormControl('', Validators.required),
     'password': new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 

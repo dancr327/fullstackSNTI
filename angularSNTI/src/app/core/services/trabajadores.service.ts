@@ -35,8 +35,20 @@ export interface Trabajadores {
 })
 export class TrabajadoresService {
 private API_URL =  'http://localhost:3000/trabajadores'; // Ajusta según tu backend
+
   constructor(private http: HttpClient) { }
+
   crearTrabajador(trabajadores: Trabajadores): Observable<Trabajadores> {
     return this.http.post<Trabajadores>(this.API_URL, trabajadores);
     }
+
+  // Método GET para obtener todos los trabajadores
+  obtenerTrabajadores(): Observable<Trabajadores[]> {
+    return this.http.get<Trabajadores[]>(this.API_URL);
+  }
+
+    // Método GET para un trabajador por ID (opcional)
+  obtenerTrabajadorPorId(id: number): Observable<Trabajadores> {
+    return this.http.get<Trabajadores>(`${this.API_URL}/${id}`);
+  }
 }
